@@ -30,11 +30,10 @@ class MultiLayerNetExtend:
                 self.params['beta' + str(idx)] = np.zeros(hidden_size_list[idx - 1])
                 self.layers['BatchNorm' + str(idx)] = BatchNormalization(self.params['gamma' + str(idx)], self.params['beta' + str(idx)])
 
-            self.layers['Activation_function' + str('idx')] = activation_layer[activation]()
+            self.layers['Activation_function' + str(idx)] = activation_layer[activation]()
 
             if self.use_dropout:
-                # self.layers['Dropout' + str(idx)] = Dropout(dropout_ratio)
-                1
+                self.layers['Dropout' + str(idx)] = Dropout(dropout_ratio)
 
         idx = self.hidden_layer_num + 1
         self.layers['Affine' + str(idx)] = Affine(self.params['W' + str(idx)], self.params['b' + str(idx)])
@@ -71,7 +70,7 @@ class MultiLayerNetExtend:
             W = self.params['W' + str(idx)]
             weight_decay += 0.5 * self.weight_decay_lambda * np.sum(W**2)
 
-            return self.last_layer.forward(y, t) + weight_decay
+        return self.last_layer.forward(y, t) + weight_decay
 
     def accuracy(self, X, T):
         Y = self.predict(X, train_flg=False)
